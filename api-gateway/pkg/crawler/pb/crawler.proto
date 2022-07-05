@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package crawler;
+
+option go_package = "./pkg/crawler/pb";
+
+service CrawlerService {
+    rpc Start(StartRequest) returns (StartResponse) {}
+    rpc Status(StatusRequest) returns (StatusResponse) {}
+}
+
+message StartRequest {}
+
+message StatusRequest {}
+
+message StartResponse {
+    enum Response {
+        statusOK = 0;
+        statusErr = 1;
+    }
+    Response data = 1;
+    optional string errorMsg = 2;
+}
+
+message StatusResponse {
+    int32 done = 1;
+    int32 failed = 2;
+}

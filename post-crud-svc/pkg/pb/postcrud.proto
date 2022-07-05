@@ -1,0 +1,70 @@
+syntax = "proto3";
+
+package postcrud;
+
+option go_package = "./pkg/pb";
+
+service PostCRUDService {
+    rpc Create(CreatePostRequest) returns (CreatePostResponse) {}
+    rpc Update(UpdatePostRequest) returns (RequestResponse) {}
+    rpc Delete(DeletePostRequest) returns (RequestResponse) {}
+    rpc Read(ReadPostRequest) returns (ReadPostResponse) {}
+    rpc List(ListPostRequest) returns (ListPostResponse) {}
+}
+
+message Post {
+    int64 ID = 1;
+    int64 userID = 2;
+    string title = 3;
+    string body = 4;
+}
+
+message CreatePostRequest {
+    Post post = 1;
+}
+
+message CreatePostResponse {
+    Response status = 1;
+    optional string errorMsg = 2;
+    int64 ID = 3;
+}
+
+message UpdatePostRequest {
+    Post post = 1;
+}
+
+message DeletePostRequest {
+    int64 ID = 1;
+}
+
+message ReadPostRequest {
+    int64 ID = 1;
+}
+
+message RequestResponse {
+    Response status = 1;
+    optional string errorMsg = 2;
+}
+
+
+message ReadPostResponse {
+    Response status = 1;
+    optional string errorMsg = 2;
+    Post post = 3;
+}
+
+message ListPostRequest {
+    optional int64 userID = 1;
+    optional int64 page = 2;
+}
+
+message ListPostResponse {
+    Response status = 1;
+    optional string errorMsg = 2;
+    repeated Post posts = 3;
+}
+
+enum Response {
+    statusOK = 0;
+    statusErr = 1;
+}
