@@ -32,7 +32,7 @@
                     "400": {
                         "description": "Bad request"
                     },
-                    "502": {
+                    "5XX": {
                         "description": "Internal server error"
                     }
                 }
@@ -75,7 +75,7 @@
                     "200": {
                         "description": "Ok, crawling started"
                     },
-                    "502": {
+                    "5XX": {
                         "description": "Internal server error"
                     }                    
                 },
@@ -109,7 +109,7 @@
                             }
                         }
                     },
-                    "502": {
+                    "5XX": {
                         "description": "Internal server error"
                     }                    
                 },
@@ -158,7 +158,7 @@
                     "400":{
                         "description": "bad request"
                     },
-                    "502":{
+                    "5XX":{
                         "description": "internal server error"
                     }
                 },
@@ -217,6 +217,103 @@
                 "security": [
                     {
                       "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/posts/{id}":{
+            "delete": {
+                "responses": {
+                    "204":{
+                        "description": "deleted successfully"
+                    },
+                    "5XX":{
+                        "description": "internal server error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth":[]
+                    }
+                ]
+            },
+            "get": {
+                "responses": {
+                    "200":{
+                        "description": "get one post",
+                        "content": {
+                            "application/json":{
+                                "schema":{
+                                    "type": "object",
+                                    "properties": {
+                                        "status":{
+                                            "type": "integer",
+                                            "description": "statusOK = 0, statusErr = 1"
+                                        },
+                                        "errorMsg":{
+                                            "type": "string"
+                                        },
+                                        "post":{
+                                            "$ref":"#/components/schemas/PostModel"
+                                        }
+                                    },
+                                    "required": ["status"]
+                                }
+                            }
+                        }
+                    },
+                    "5XX":{
+                        "description": "internal server error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth":[]
+                    }
+                ]
+            },
+            "put": {
+                "description": "ID should equal to path`s id wildcard, otherwise you'll recieve error",
+                "requestBody":{
+                    "content": {
+                        "application/json":{
+                            "schema":{
+                                "$ref":"#/components/schemas/PostModel"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "204":{
+                        "description": "updated successfully",
+                        "content": {
+                            "application/json":{
+                                "schema":{
+                                    "type": "object",
+                                    "properties": {
+                                        "status":{
+                                            "type": "integer",
+                                            "description": "statusOK = 0, statusErr = 1"
+                                        },
+                                        "errorMsg":{
+                                            "type": "string"
+                                        }
+                                    },
+                                    "required": ["status"]
+                                }
+                            }
+                        }
+                    },
+                    "5XX":{
+                        "description": "internal server error"
+                    },
+                    "4XX":{
+                        "description": "bad request error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth":[]
                     }
                 ]
             }
