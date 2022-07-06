@@ -24,5 +24,5 @@ func ReadPost(ctx *gin.Context, c pb.PostCRUDServiceClient) {
 		return
 	}
 
-	ctx.JSON(http.StatusCreated, &res)
+	ctx.JSON(http.StatusOK, &res)
 }
