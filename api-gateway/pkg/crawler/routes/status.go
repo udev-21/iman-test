@@ -17,5 +17,5 @@ func CrawlerStatus(ctx *gin.Context, c pb.CrawlerServiceClient) {
 		return
 	}
 
-	ctx.JSON(http.StatusCreated, &res)
+	ctx.JSON(http.StatusOK, &res)
 }

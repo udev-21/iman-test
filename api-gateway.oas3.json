@@ -1,0 +1,291 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "API",
+        "version": "1.0.0",
+        "contact": {
+            "name": "Sharof Khudyaberdiev",
+            "email": "udev21@gmail.com"
+        }
+    },
+    "servers": [
+        {
+            "url": "http://localhost:3000"
+        }
+    ],
+    "paths": {
+        "/auth/register": {
+            "post": {
+                "requestBody":{
+                    "content": {
+                        "application/json":{
+                            "schema":{
+                                "$ref":"#/components/schemas/LoginRegisterInput"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Regsitered successfully"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "502": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
+        "/auth/login": {
+            "post": {
+                "requestBody":{
+                    "content": {
+                        "application/json":{
+                            "schema":{
+                                "$ref":"#/components/schemas/LoginRegisterInput"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "content": {
+                            "application/json":{
+                                "schema": {
+                                    "$ref": "#/components/schemas/LoginResponse"
+                                }
+                            }
+                        },
+                        "description": "Regsitered successfully"
+                    },
+                    "4XX": {
+                        "description": "Bad request"
+                    },
+                    "5XX": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
+        "/crawler/start":{
+            "post": {
+                "responses": {
+                    "200": {
+                        "description": "Ok, crawling started"
+                    },
+                    "502": {
+                        "description": "Internal server error"
+                    }                    
+                },
+                "security": [
+                    {
+                      "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/crawler/status":{
+            "post": {
+                "responses": {
+                    "200": {
+                        "description": "Ok, crawling started",
+                        "content": {
+                            "schema":{
+                                "schema":{
+                                    "type": "object",
+                                    "properties": {
+                                        "done":{
+                                            "type": "integer",
+                                            "description": "how many pages saved successfully"
+                                        },
+                                        "falied":{
+                                            "type": "integer",
+                                            "description": "how many pages falied"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "502": {
+                        "description": "Internal server error"
+                    }                    
+                },
+                "security": [
+                    {
+                      "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/posts":{
+            "post": {
+                "requestBody":{
+                    "content": {
+                        "schema":{
+                            "schema": {
+                                "$ref": "#/components/schemas/PostModel"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201":{
+                        "description": "created successfully",
+                        "content": {
+                            "application/json":{
+                                "schema":{
+                                    "type": "object",
+                                    "properties": {
+                                        "status":{
+                                            "type": "integer",
+                                            "description": "statusOK = 0, statusErr = 1"
+                                        },
+                                        "errorMsg":{
+                                            "type": "string"
+                                        },
+                                        "ID":{
+                                            "type": "integer"
+                                        }
+                                    },
+                                    "required": ["status", "ID"]
+                                }
+                            }
+                        }
+                    },
+                    "400":{
+                        "description": "bad request"
+                    },
+                    "502":{
+                        "description": "internal server error"
+                    }
+                },
+                "security": [
+                    {
+                      "bearerAuth": []
+                    }
+                ]
+            },
+            "get": {
+                "responses": {
+                    "200":{
+                        "description": "OK",
+                        "content": {
+                            "application/json":{
+                                "schema":{
+                                    "type": "object",
+                                    "properties": {
+                                        "status":{
+                                            "type": "integer",
+                                            "description": "statusOK = 0, statusErr = 1"
+                                        },
+                                        "errorMsg":{
+                                            "type": "string"
+                                        },
+                                        "posts":{
+                                            "type": "array",
+                                            "items":{
+                                                "$ref":"#/components/schemas/PostModel"
+                                            }
+                                        }
+                                    },
+                                    "required": ["status"]
+                                }
+                            }
+                        }
+                    }
+                },
+                "requestBody":{
+                    "content": {
+                        "applicatoin/json":{
+                            "schema":{
+                                "type": "object",
+                                "properties": {
+                                    "userID": {
+                                        "type": "integer"
+                                    },
+                                    "page": {
+                                        "type": "integer"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                      "bearerAuth": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "LoginRegisterInput": {
+                "type": "object",
+                "properties": {
+                    "email": {
+                        "type": "string",
+                        "format": "email"
+                    },
+                    "password": {
+                        "type": "string",
+                        "format": "password"
+                    }
+                },
+                "required": [
+                    "email",
+                    "password"
+                ]
+            },
+            "LoginResponse": {
+                "type": "object",
+                "properties": {
+                    "status": {
+                        "type": "integer"
+                    },
+                    "error": {
+                        "type": "string"
+                    },
+                    "token": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "status",
+                    "token"
+                ]
+            },
+            "PostModel":{
+                "type": "object",
+                "properties": {
+                    "ID":{
+                        "type": "integer"
+                    },
+                    "userID":{
+                        "type": "integer"
+                    },
+                    "title":{
+                        "type": "string"
+                    },
+                    "body":{
+                        "type": "string"
+                    }
+                },
+                "required": ["ID", "userID", "title", "body"]
+            }
+        },
+        "securitySchemes": {
+            "bearerAuth": {
+              "type": "http",
+              "description": "JWT Authorization header using the Bearer scheme.",
+              "scheme": "bearer",
+              "bearerFormat": "JWT"
+            }
+        },
+        
+    }
+}

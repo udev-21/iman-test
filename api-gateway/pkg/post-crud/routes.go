@@ -17,8 +17,8 @@ func RegisterRoutes(r *gin.Engine, c *config.Config, authSvc *auth.ServiceClient
 	routes := r.Group("/posts")
 	routes.Use(a.AuthRequired)
 
-	routes.POST("/", svc.CreatePost)
-	routes.GET("/", svc.ListPost)
+	routes.POST("", svc.CreatePost)
+	routes.GET("", svc.ListPost)
 	routes.GET("/:id", svc.ReadPost)
 	routes.PUT("/:id", svc.UpdatePost)
 
